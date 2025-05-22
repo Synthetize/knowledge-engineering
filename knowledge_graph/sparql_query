@@ -1,0 +1,22 @@
+SELECT ?dish ?name (SUM(xsd:int(?cal)) AS ?totalCalories)
+WHERE {
+  # Only dishes allowed by the selected diet
+  ?diet :canEat ?dish .
+  ?dish :name ?name ;
+        :hasIngredient ?ingredient .
+
+  # Get ingredient calories
+  ?ingredient :hasCalories ?cal .
+
+  # Exclude ingredients with unwanted allergens
+  FILTER NOT EXISTS {
+    ?ingredient :containsAllergen ?allergen .
+    FILTER (?allergen IN (:Gluten, :Lactose, :EggsAllergen))  # <-- Replace with input allergies
+  }
+
+  # Select the diet (input)
+  FILTER (?diet = :Vegetarian)  # <-- Replace with input diet
+}
+GROUP BY ?dish ?name
+HAVING (SUM(xsd:int(?cal)) <= 500)  # <-- Replace with input max calories
+ORDER BY ?totalCalories
