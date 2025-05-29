@@ -1,0 +1,95 @@
+<div class="notebook">
+
+<div class="nb-cell program" name="p1">
+ingredient(beef, animal, 250, []).
+ingredient(chicken, animal, 239, []).
+ingredient(salmon, animal, 208, [fish]).
+ingredient(egg, animal_product, 155, [eggs]).
+ingredient(milk, animal_product, 42, [milk]).
+ingredient(cheese, animal_product, 402, [milk]).
+ingredient(butter, animal_product, 717, [milk]).
+ingredient(rice, plant, 130, []).
+ingredient(pasta, plant, 131, [gluten]).
+ingredient(bread, plant, 265, [gluten]).
+ingredient(tomato, plant, 18, []).
+ingredient(lettuce, plant, 15, []).
+ingredient(carrot, plant, 41, []).
+ingredient(avocado, plant, 160, []).
+ingredient(tofu, plant, 76, []).
+ingredient(almonds, plant, 579, [nuts]).
+ingredient(peanuts, plant, 567, [nuts]).
+
+dish(steak, [beef, butter, carrot]).
+dish(grilled_chicken, [chicken, rice, tomato]).
+dish(salad, [lettuce, tomato, avocado, carrot]).
+dish(vegan_salad, [lettuce, tomato, avocado, carrot, tofu]).
+dish(pasta_al_pomodoro, [pasta, tomato, cheese]).
+dish(peanut_butter_sandwich, [bread, peanuts, butter]).
+dish(scrambled_eggs, [egg, butter, milk]).
+dish(fish_and_rice, [salmon, rice, butter]).
+dish(vegan_bowl, [rice, tofu, avocado, tomato]).
+
+client(maria, vegan, 800, [nuts]).
+client(luigi, vegetarian, 1200, [gluten]).
+client(giovanni, omnivore, 2500, [milk]).
+client(sara, vegan, 500, []).
+client(anna, vegetarian, 1500, [eggs, nuts]).
+client(paolo, omnivore, 10000, []).
+client(luca, vegan, 700, [gluten, milk, nuts, fish, eggs]).
+
+is_animal(Ingredient) :- ingredient(Ingredient, animal, _, _).
+is_animal_product(Ingredient) :- ingredient(Ingredient, animal_product, _, _).
+is_plant(Ingredient) :-ingredient(Ingredient, plant, _, _).
+
+is_vegan(Dish) :-
+    dish(Dish, Ingredients),
+	not((member(Ing, Ingredients), not(is_plant(Ing)))).
+
+is_vegetarian(Dish) :-
+    dish(Dish, Ingredients),
+	not((member(Ing, Ingredients), is_animal(Ing))).
+
+is_omnivore(Dish) :-
+    dish(Dish,_).
+
+contains_any_allergen(Ingredient, AllergenList) :-
+    ingredient(Ingredient, _, _, IngredientAllergens),
+    member(Allergen, AllergenList),     
+    member(Allergen, IngredientAllergens), !.
+
+
+% Predicato per sommare le calorie di una lista di ingredienti
+sum_calories([], 0).
+sum_calories([Ingredient | Rest], TotalCalories) :-
+    ingredient(Ingredient, _, Calories, _),
+    sum_calories(Rest, RestCalories),
+    TotalCalories is Calories + RestCalories.
+
+% Predicato principale che filtra i piatti in base alle calorie massime
+dishes_below_calories(MaxCalories, Dish) :-
+    dish(Dish, Ingredients),
+    sum_calories(Ingredients, TotalCalories),
+    TotalCalories =&lt; MaxCalories.
+
+suggested_dishes(ClientName, Dish) :-
+    client(ClientName, DietType, MaxCalories, Allergens),
+    dish(Dish, Ingredients),
+    % Controlla se il piatto è compatibile con la dieta del cliente
+    (
+        DietType = vegan -&gt; is_vegan(Dish);
+        DietType = vegetarian -&gt; is_vegetarian(Dish);
+        DietType = omnivore -&gt; is_omnivore(Dish)
+    ),
+    % Controlla che il piatto non contenga allergeni del cliente
+    not((member(Ingredient, Ingredients), contains_any_allergen(Ingredient, Allergens))),
+    % Controlla che le calorie totali siano &lt;= al limite del cliente
+    sum_calories(Ingredients, TotalCalories),
+    TotalCalories =&lt; MaxCalories.
+
+</div>
+
+<div class="nb-cell query" data-tabled="true" name="q1">
+suggested_dishes(giovanni,X)
+</div>
+
+</div>

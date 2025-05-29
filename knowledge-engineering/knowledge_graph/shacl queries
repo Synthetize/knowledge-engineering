@@ -1,0 +1,66 @@
+@prefix : <http://menu.ch#> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+###############
+# Dish Shape
+###############
+
+:DishShape a sh:NodeShape ;
+  sh:targetClass :Dish ;
+  sh:property [
+    sh:path :hasIngredient ;
+    sh:minCount 1 ;
+    sh:message "A dish must have at least one ingredient." ;
+  ] ;
+  sh:property [
+    sh:path :name ;
+    sh:datatype xsd:string ;
+    sh:minCount 1 ;
+    sh:message "A dish must have a name." ;
+  ] .
+
+###############
+# Ingredient Shape
+###############
+
+:IngredientShape a sh:NodeShape ;
+  sh:targetClass :Ingredient ;
+  sh:property [
+    sh:path :name ;
+    sh:datatype xsd:string ;
+    sh:minCount 1 ;
+    sh:message "An ingredient must have a name." ;
+  ] ;
+  sh:property [
+    sh:path :hasCalories ;
+    sh:datatype xsd:int ;
+    sh:minCount 1 ;
+    sh:message "An ingredient must have calories specified as an integer." ;
+  ] .
+
+###############
+# Allergen Shape
+###############
+
+:AllergenShape a sh:NodeShape ;
+  sh:targetClass :Allergen ;
+  sh:property [
+    sh:path :name ;
+    sh:datatype xsd:string ;
+    sh:minCount 1 ;
+    sh:message "An allergen must have a name." ;
+  ] .
+
+###############
+# Diet Shape
+###############
+
+:DietShape a sh:NodeShape ;
+  sh:targetClass :Diet ;
+  sh:property [
+    sh:path :canEat ;
+    sh:class :Dish ;
+    sh:minCount 1 ;
+    sh:message "A diet must list at least one dish it can eat." ;
+  ] .
