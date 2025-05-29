@@ -2,22 +2,91 @@
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
 
+###############
 # RDF DEFS
+###############
 
 :Dish a rdfs:Class .
+
+:MainCourse a rdfs:Class ;
+  rdfs:subClassOf :Dish .
+
+:SecondCourse a rdfs:Class ;
+  rdfs:subClassOf :Dish .
+
+:Dessert a rdfs:Class ;
+  rdfs:subClassOf :Dish .
+
 :Diet a rdfs:Class .
+
 :Ingredient a rdfs:Class .
+
+:DairyProduct a rdfs:Class ;
+  rdfs:subClassOf :Ingredient .
+
+:AnimalProduct a rdfs:Class ;
+  rdfs:subClassOf :Ingredient .
+
+:MeatProduct a rdfs:Class ;
+  rdfs:subClassOf :AnimalProduct .
+
+:Seafood a rdfs:Class ;
+  rdfs:subClassOf :AnimalProduct .
+
+:Vegetable a rdfs:Class ;
+  rdfs:subClassOf :Ingredient .
+
+:GrainProduct a rdfs:Class ;
+  rdfs:subClassOf :Ingredient .
+
+:Legume a rdfs:Class ;
+  rdfs:subClassOf :Ingredient .
+
+:Spice a rdfs:Class ;
+  rdfs:subClassOf :Ingredient .
+
+:Condiment a rdfs:Class ;
+  rdfs:subClassOf :Ingredient .
+
+:Alcohol a rdfs:Class ;
+  rdfs:subClassOf :Ingredient .
+
 :Allergen a rdfs:Class .
 
-:hasIngredient a rdf:Property .
-:name a rdf:Property .
-:canEat a rdf:Property .
-:hasCalories a rdf:Property .
-:containsAllergen a rdf:Property ;
+###############
+# OBJECT PROPERTIES
+###############
+
+:hasIngredient a owl:ObjectProperty ;
+  rdfs:domain :Dish ;
+  rdfs:range :Ingredient .
+
+:canEat a owl:ObjectProperty ;
+  rdfs:domain :Diet ;
+  rdfs:range :Dish .
+
+:containsAllergen a owl:ObjectProperty ;
   rdfs:domain :Ingredient ;
   rdfs:range :Allergen .
-  
+
+###############
+# DATA PROPERTIES
+###############
+
+:name a owl:DatatypeProperty ;
+  rdfs:domain [ owl:unionOf ( :Dish :Ingredient :Allergen ) ] ;
+  rdfs:range xsd:string .
+
+:hasCalories a owl:DatatypeProperty ;
+  rdfs:domain :Ingredient ;
+  rdfs:range xsd:int .
+
+###############
+# ALLERGIES
+###############
+
 :Gluten a :Allergen ;
   :name "Gluten Intollerant"^^xsd:string ;
 .
@@ -34,7 +103,9 @@
   :name "Nut Intollerant"^^xsd:string ;
 .
 
+###############
 # DIETS
+###############
 
 :Omnivore a :Diet ;
   :canEat :RisottoAllaMilanese ;
@@ -51,9 +122,11 @@
   :canEat :Tiramisu ;
 .
 
+###############
 # DISHES
+###############
 
-:RisottoAllaMilanese a :Dish ;
+:RisottoAllaMilanese a :MainCourse ;
   :name "Risotto alla milanese"^^xsd:string ;
   :hasIngredient :Rice ;
   :hasIngredient :Saffron ;
@@ -62,7 +135,7 @@
   :hasIngredient :ParmesanCheese ;
 .
 
-:Carbonara a :Dish ;
+:Carbonara a :MainCourse ;
   :name "Carbonara"^^xsd:string ;
   :hasIngredient :WheatPasta ;
   :hasIngredient :Eggs ;
@@ -71,7 +144,7 @@
   :hasIngredient :BlackPepper ;
 .
 
-:Lasagna a :Dish ;
+:Lasagna a :MainCourse ;
   :name "Lasagna"^^xsd:string ;
   :hasIngredient :WheatPastaSheets ;
   :hasIngredient :GroundBeef ;
@@ -79,7 +152,7 @@
   :hasIngredient :BechamelSauce ;
 .
 
-:PolentaAllaSalsiccia a :Dish ;
+:PolentaAllaSalsiccia a :MainCourse ;
   :name "Polenta alla salsiccia"^^xsd:string ;
   :hasIngredient :Cornmeal ;
   :hasIngredient :PorkSausage ;
@@ -88,7 +161,7 @@
   :hasIngredient :OliveOil ;
 .
 
-:Tiramisu a :Dish ;
+:Tiramisu a :MainCourse ;
   :name "Tiramisù"^^xsd:string ;
   :hasIngredient :Ladyfingers ;
   :hasIngredient :MascarponeCheese ;
@@ -98,7 +171,7 @@
   :hasIngredient :CocoaPowder ;
 .
 
-:TortelliniInBrodo a :Dish ;
+:TortelliniInBrodo a :MainCourse ;
   :name "Tortellini in brodo"^^xsd:string ;
   :hasIngredient :WheatTortellini ;
   :hasIngredient :MeatBroth ;
@@ -106,7 +179,7 @@
   :hasIngredient :Eggs ;
 .
 
-:SpaghettiAlleVongole a :Dish ;
+:SpaghettiAlleVongole a :MainCourse ;
   :name "Spaghetti alle vongole"^^xsd:string ;
   :hasIngredient :WheatSpaghetti ;
   :hasIngredient :Clams ;
@@ -116,166 +189,168 @@
   :hasIngredient :WhiteWine ;
 .
 
+###############
 # INGREDIENTS
+###############
 
-:Rice a :Ingredient ; 
+:Rice a :GrainProduct ; 
   :name "Rice"^^xsd:string ;
   :hasCalories "130"^^xsd:int ;
 .
 
-:Saffron a :Ingredient ; 
+:Saffron a :Spice ; 
   :name "Saffron"^^xsd:string ;
   :hasCalories "2"^^xsd:int ;
 .
 
-:Onion a :Ingredient ; 
+:Onion a :Vegetable ; 
   :name "Onion"^^xsd:string ;
   :hasCalories "40"^^xsd:int ;
 .
 
-:Butter a :Ingredient ; 
+:Butter a :DairyProduct ; 
   :name "Butter"^^xsd:string ;
   :hasCalories "100"^^xsd:int ;
 .
 
-:ParmesanCheese a :Ingredient ; 
+:ParmesanCheese a :DairyProduct ; 
   :name "Parmesan Cheese"^^xsd:string ;
   :hasCalories "90"^^xsd:int ;
   :containsAllergen :Lactose ;
 .
 
-:WheatPasta a :Ingredient ; 
+:WheatPasta a :GrainProduct ; 
   :name "Wheat Pasta"^^xsd:string ;
   :hasCalories "220"^^xsd:int ;
   :containsAllergen :Gluten ;
 .
 
-:Eggs a :Ingredient ;
+:Eggs a :AnimalProduct ;
   :name "Eggs"^^xsd:string ;
   :hasCalories "70"^^xsd:int ;
   :containsAllergen :EggsAllergen ;
 .
 
-:PorkCheek a :Ingredient ;
+:PorkCheek a :MeatProduct ;
   :name "Port Cheek"^^xsd:string ;
   :hasCalories "150"^^xsd:int ;
 .
 
-:PecorinoCheese a :Ingredient ;
+:PecorinoCheese a :DairyProduct ;
   :name "Pecorino Cheese"^^xsd:string ;
   :hasCalories "80"^^xsd:int ;
   :containsAllergen :Lactose ;
 .
 
-:BlackPepper a :Ingredient ;
+:BlackPepper a :Spice ;
   :name "Black Pepper"^^xsd:string ;
   :hasCalories "5"^^xsd:int ;
 .
 
-:WheatPastaSheets a :Ingredient ;
+:WheatPastaSheets a :GrainProduct ;
   :name "Wheat Pasta Sheets"^^xsd:string ;
   :hasCalories "200"^^xsd:int ;
   :containsAllergen :Gluten ;
 .
 
-:GroundBeef a :Ingredient ;
+:GroundBeef a :MeatProduct ;
   :name "Ground Beef"^^xsd:string ;
   :hasCalories "180"^^xsd:int ;
 .
 
-:TomatoSauce a :Ingredient ;
+:TomatoSauce a :Condiment ;
   :name "Tomato Sauce"^^xsd:string ;
   :hasCalories "60"^^xsd:int ;
 .
 
-:BechamelSauce a :Ingredient ;
+:BechamelSauce a :DairyProduct ;
   :name "Bechamel Sauce"^^xsd:string ;
   :hasCalories "90"^^xsd:int ;
   :containsAllergen :Lactose ;
 .
 
-:Cornmeal a :Ingredient ;
+:Cornmeal a :GrainProduct ;
   :name "Cornmeal"^^xsd:string ;
   :hasCalories "170"^^xsd:int ;
 .
 
-:PorkSausage a :Ingredient ;
+:PorkSausage a :MeatProduct ;
   :name "Pork Sausage"^^xsd:string ;
   :hasCalories "200"^^xsd:int ;
 .
 
-:OliveOil a :Ingredient ;
+:OliveOil a :Condiment ;
   :name "Olive Oil"^^xsd:string ;
   :hasCalories "120"^^xsd:int ;
 .
 
-:Ladyfingers a :Ingredient ;
+:Ladyfingers a :GrainProduct ;
   :name "Ladyfingers"^^xsd:string ;
   :hasCalories "120"^^xsd:int ;
   :containsAllergen :Gluten ; 
   :containsAllergen :EggsAllergen ;
 .
 
-:MascarponeCheese a :Ingredient ;
+:MascarponeCheese a :DairyProduct ;
   :name "Mascarpone Cheese"^^xsd:string ;
   :hasCalories "100"^^xsd:int ;
   :containsAllergen :Lactose ;
 .
 
-:Sugar a :Ingredient ;
+:Sugar a :Condiment ;
   :name "Sugar"^^xsd:string ;
   :hasCalories "60"^^xsd:int ;
 .
 
-:Coffee a :Ingredient ;
+:Coffee a :Condiment ;
   :name "Coffee"^^xsd:string ;
   :hasCalories "2"^^xsd:int ;
 .
 
-:CocoaPowder a :Ingredient ;
+:CocoaPowder a :Condiment ;
   :name "Cocoa Powder"^^xsd:string ;
   :hasCalories "20"^^xsd:int ;
 .
 
-:WheatTortellini a :Ingredient ;
+:WheatTortellini a :GrainProduct ;
   :name "Wheat Tortellini"^^xsd:string ;
   :hasCalories "200"^^xsd:int ;
   :containsAllergen :Gluten ;
 .
 
-:MeatBroth a :Ingredient ;
+:MeatBroth a :MeatProduct ;
   :name "Meat Broth"^^xsd:string ;
   :hasCalories "80"^^xsd:int ;
 .
 
-:WheatSpaghetti a :Ingredient ;
+:WheatSpaghetti a :GrainProduct ;
   :name "Wheat Spaghetti"^^xsd:string ;
   :hasCalories "220"^^xsd:int ;
   :containsAllergen :Gluten ;
 .
 
-:WhiteWine a :Ingredient ;
+:WhiteWine a :Alcohol ;
   :name "White Wine"^^xsd:string ;
   :hasCalories "10"^^xsd:int ;
 .
 
-:Clams a :Ingredient ;
+:Clams a :Seafood ;
   :name "Clams"^^xsd:string ;
   :hasCalories "70"^^xsd:int ;
   :containsAllergen :Fish ;
 .
 
-:Garlic a :Ingredient ;
+:Garlic a :Vegetable ;
   :name "Garlic"^^xsd:string ;
   :hasCalories "5"^^xsd:int ;
 .
 
-:Parsley a :Ingredient ;
+:Parsley a :Vegetable ;
   :name "Parsley"^^xsd:string ;
   :hasCalories "3"^^xsd:int ;
 .
 
-:Cheese a :Ingredient ;
+:Cheese a :DairyProduct ;
   :name "Cheese"^^xsd:string ;
   :hasCalories "50"^^xsd:int ;
   :containsAllergen :Lactose ;
