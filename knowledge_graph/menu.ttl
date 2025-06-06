@@ -8,6 +8,10 @@
 # RDF DEFS
 ###############
 
+###############
+# DISH SUB-CLASSES
+###############
+
 :Dish a rdfs:Class .
 
 :MainCourse a rdfs:Class ;
@@ -19,7 +23,15 @@
 :Dessert a rdfs:Class ;
   rdfs:subClassOf :Dish .
 
+###############
+# DIET
+###############
+
 :Diet a rdfs:Class .
+
+###############
+# INGREDIENT SUB-CLASSES
+###############
 
 :Ingredient a rdfs:Class .
 
@@ -53,39 +65,14 @@
 :Alcohol a rdfs:Class ;
   rdfs:subClassOf :Ingredient .
 
-:Allergen a rdfs:Class .
-
-###############
-# OBJECT PROPERTIES
-###############
-
-:hasIngredient a owl:ObjectProperty ;
-  rdfs:domain :Dish ;
-  rdfs:range :Ingredient .
-
-:canEat a owl:ObjectProperty ;
-  rdfs:domain :Diet ;
-  rdfs:range :Dish .
-
-:containsAllergen a owl:ObjectProperty ;
-  rdfs:domain :Ingredient ;
-  rdfs:range :Allergen .
-
-###############
-# DATA PROPERTIES
-###############
-
-:name a owl:DatatypeProperty ;
-  rdfs:domain [ owl:unionOf ( :Dish :Ingredient :Allergen ) ] ;
-  rdfs:range xsd:string .
-
-:hasCalories a owl:DatatypeProperty ;
-  rdfs:domain :Ingredient ;
-  rdfs:range xsd:int .
+:Wate a rdfs:Class ;
+ rdfs:subClassOf :Ingredient .
 
 ###############
 # ALLERGIES
 ###############
+
+:Allergen a rdfs:Class .
 
 :Gluten a :Allergen ;
   :name "Gluten Intollerant"^^xsd:string ;
@@ -104,27 +91,98 @@
 .
 
 ###############
+# OBJECT PROPERTIES
+###############
+
+:hasIngredient a owl:ObjectProperty ;
+  rdfs:domain :Dish ;
+  rdfs:range :Ingredient .
+
+:canEat a owl:ObjectProperty ;
+  rdfs:domain :Diet ;
+  rdfs:range :Dish .
+
+:containsAllergen a owl:ObjectProperty ;
+  rdfs:domain :Ingredient ;
+  rdfs:range :Allergen .
+
+:fitForDiet a owl:ObjectProperty ;
+  rdfs:domain :Ingredient ;
+  rdfs:range :Diet .
+
+###############
+# DATA PROPERTIES
+###############
+
+:name a owl:DatatypeProperty ;
+  rdfs:domain [ owl:unionOf ( :Dish :Ingredient :Allergen ) ] ;
+  rdfs:range xsd:string .
+
+:hasCalories a owl:DatatypeProperty ;
+  rdfs:domain :Ingredient ;
+  rdfs:range xsd:int .
+
+###############
 # DIETS
 ###############
 
 :Omnivore a :Diet ;
+  :canEat :SorbettoAlLimone ;
+  :canEat :Tiramisu ;
+  :canEat :CremaCaffe ;
   :canEat :RisottoAllaMilanese ;
   :canEat :Carbonara ;
   :canEat :Lasagna ;
-  :canEat :PolentaAllaSalsiccia ;
-  :canEat :Tiramisu ;
-  :canEat :TortelliniInBrodo ;
-  :canEat :SpaghettiAlleVongole ;
+  :canEat :SpaghettiAlleVongole
+  :canEat :PastaAlBurroParmigianoPepeNero ;
+  :canEat :SpaghettiAlPomodoro ;
+  :canEat :RisoConPomodoroCipollaPrezzemolo ;
+  :canEat :BisteccaAllaFiorentina ;
+  :canEat :ScaloppineAlLimone ;
+  :canEat :InvoltiniDiManzoAlParmigiano ;
+  :canEat :GuancialeCroccanteConUova ;
+  :canEat :OmeletteAlParmigianoConCipollePrezzemolo ;
+  :canEat :MistoVerdure ;
+  :canEat :SalmoneInCrosta ;
 .
 
 :Vegetarian a :Diet ;
-  :canEat :RisottoAllaMilanese ;
+  :canEat :SorbettoAlLimone ;
   :canEat :Tiramisu ;
+  :canEat :CremaCaffe ;
+  :canEat :RisottoAllaMilanese ;
+  :canEat :SpaghettiAlPomodoro ;
+  :canEat :PastaAlBurroParmigianoPepeNero ;
+  :canEat :OmeletteAlParmigianoConCipollePrezzemolo ;
+  :canEat :MistoVerdure ;
+.
+
+:Vegan a :Diet ;
+  :canEat :SorbettoAlLimone ;
+  :canEat :SpaghettiAlPomodoro ;
+  :canEat :RisoConPomodoroCipollaPrezzemolo ;
+  :canEat :OmeletteAlParmigianoConCipollePrezzemolo ;
 .
 
 ###############
 # DISHES
 ###############
+
+:SorbettoAlLimone a :Dessert ;
+  :name "Sorbetto al limone"^^xsd:string ;
+  :hasIngredient :Lemon ;
+  :hasIngredient :Water ;
+  :hasIngredient :Sugar ;
+.
+
+:CremaCaffe a :Dessert ;
+  :name "Sorbetto al limone"^^xsd:string ;
+  :hasIngredient :Coffee ;
+  :hasIngredient :MascarponeCheese ;
+  :hasIngredient :Water ;
+  :hasIngredient :CocoaPowder ;
+  :hasIngredient :Sugar ;
+.
 
 :RisottoAllaMilanese a :MainCourse ;
   :name "Risotto alla milanese"^^xsd:string ;
@@ -152,18 +210,19 @@
   :hasIngredient :BechamelSauce ;
 .
 
-:PolentaAllaSalsiccia a :MainCourse ;
-  :name "Polenta alla salsiccia"^^xsd:string ;
-  :hasIngredient :Cornmeal ;
-  :hasIngredient :PorkSausage ;
-  :hasIngredient :TomatoSauce ;
-  :hasIngredient :Onion ;
+:SpaghettiAlPomodoro a :MainCourse ;
+  :name "Spaghetti al pomodoro"^^xsd:string ;
+  :hasIngredient :WheatPasta ;
+  :hasIngredient :RipeTomatoes ;
+  :hasIngredient :Garlic ;
   :hasIngredient :OliveOil ;
+  :hasIngredient :Basil ;
+  :hasIngredient :Salt ;
 .
 
 :Tiramisu a :MainCourse ;
   :name "Tiramisù"^^xsd:string ;
-  :hasIngredient :Ladyfingers ;
+  :hasIngredient :LadyFingers ;
   :hasIngredient :MascarponeCheese ;
   :hasIngredient :Eggs ;
   :hasIngredient :Sugar ;
@@ -171,22 +230,107 @@
   :hasIngredient :CocoaPowder ;
 .
 
-:TortelliniInBrodo a :MainCourse ;
-  :name "Tortellini in brodo"^^xsd:string ;
-  :hasIngredient :WheatTortellini ;
-  :hasIngredient :MeatBroth ;
-  :hasIngredient :Cheese ;
-  :hasIngredient :Eggs ;
-.
-
 :SpaghettiAlleVongole a :MainCourse ;
   :name "Spaghetti alle vongole"^^xsd:string ;
-  :hasIngredient :WheatSpaghetti ;
+  :hasIngredient :WheatPasta ;
   :hasIngredient :Clams ;
   :hasIngredient :Garlic ;
   :hasIngredient :OliveOil ;
   :hasIngredient :Parsley ;
   :hasIngredient :WhiteWine ;
+.
+
+:PastaAlBurroParmigianoPepeNero a :MainCourse ;
+  :name "Pasta al Burro, Parmigiano e Pepe Nero"^^xsd:string ;
+  :hasIngredient :WheatPasta ;
+  :hasIngredient :Butter ;
+  :hasIngredient :ParmesanCheese ;
+  :hasIngredient :BlackPepper ;
+  :hasIngredient :Salt ;
+.
+
+:RisoConPomodoroCipollaPrezzemolo a :MainCourse ;
+  :name "Riso con Pomodoro, Cipolla e Prezzemolo"^^xsd:string ;
+  :hasIngredient :Rice ;
+  :hasIngredient :RipeTomatoes ;
+  :hasIngredient :Onion ;
+  :hasIngredient :OliveOil ;
+  :hasIngredient :Parsley ;
+  :hasIngredient :Salt ;
+  :hasIngredient :BlackPepper ;
+.
+
+:BisteccaAllaFiorentina a :SecondCourse ;
+  :name "Bistecca alla Fiorentina"^^xsd:string ;
+  :hasIngredient :BeefSteak ;
+  :hasIngredient :Salt ;
+  :hasIngredient :BlackPepper ;
+.
+
+:ScaloppineAlLimone a :SecondCourse ;
+  :name "Scaloppine al limone"^^xsd:string ;
+  :hasIngredient :Chicken ;
+  :hasIngredient :WheatFlour ;
+  :hasIngredient :Lemon ;
+  :hasIngredient :Butter ;
+  :hasIngredient :Parsley ;
+  :hasIngredient :Salt ;
+  :hasIngredient :BlackPepper ;
+  :hasIngredient :OliveOil ;
+.
+
+:InvoltiniDiManzoAlParmigiano a :SecondCourse ;
+  :name "Involtini di Manzo al Parmigiano"^^xsd:string ;
+  :hasIngredient :BeefSteak ;
+  :hasIngredient :ParmesanCheese ;
+  :hasIngredient :Parsley ;
+  :hasIngredient :Garlic ;
+  :hasIngredient :Salt ;
+  :hasIngredient :BlackPepper ;
+  :hasIngredient :OliveOil ;
+.
+
+:GuancialeCroccanteConUova a :SecondCourse ;
+  :name "Guanciale Croccante con Uova"^^xsd:string ;
+  :hasIngredient :PorkCheek ;
+  :hasIngredient :Eggs ;
+  :hasIngredient :ParmesanCheese ;
+  :hasIngredient :Salt ;
+  :hasIngredient :BlackPepper ;
+  :hasIngredient :OliveOil ;
+.
+
+:OmeletteAlParmigianoConCipollePrezzemolo a :SecondCourse ;
+  :name "Omelette al Parmigiano con Cipolle e Prezzemolo"^^xsd:string ;
+  :hasIngredient :Eggs ;
+  :hasIngredient :ParmesanCheese ;
+  :hasIngredient :Onion ;
+  :hasIngredient :Butter ;
+  :hasIngredient :Parsley ;
+  :hasIngredient :Salt ;
+  :hasIngredient :BlackPepper ;
+.
+
+:MistoVerdure a :SecondCourse ;
+  :name "Misto Verdure"^^xsd:string ;
+  :hasIngredient :BellPepper ;
+  :hasIngredient :Zucchini ;
+  :hasIngredient :EggPlant ;
+  :hasIngredient :Garlic ;
+  :hasIngredient :OliveOil ;
+  :hasIngredient :Salt ;
+  :hasIngredient :Parsley ;
+.
+
+:SalmoneInCrosta a :SecondCourse ;
+  :name "Salmone in Crosta"^^xsd:string ;
+  :hasIngredient :SalmonFilet ;
+  :hasIngredient :WheatFlour ;
+  :hasIngredient :OliveOil ;
+  :hasIngredient :Garlic ;
+  :hasIngredient :Lemon ;
+  :hasIngredient :Salt ;
+  :hasIngredient :Parsley ;
 .
 
 ###############
@@ -196,162 +340,272 @@
 :Rice a :GrainProduct ; 
   :name "Rice"^^xsd:string ;
   :hasCalories "130"^^xsd:int ;
+  :fitForDiet :Omnivore ;
+  :fitForDiet :Vegetarian ;
+  :fitForDiet :Vegan ;
 .
 
 :Saffron a :Spice ; 
   :name "Saffron"^^xsd:string ;
-  :hasCalories "2"^^xsd:int ;
+  :hasCalories "310"^^xsd:int ;
+  :fitForDiet :Omnivore ;
+  :fitForDiet :Vegetarian ;
+  :fitForDiet :Vegan ;
 .
 
 :Onion a :Vegetable ; 
   :name "Onion"^^xsd:string ;
   :hasCalories "40"^^xsd:int ;
+  :fitForDiet :Omnivore ;
+  :fitForDiet :Vegetarian ;
+  :fitForDiet :Vegan ;
 .
 
 :Butter a :DairyProduct ; 
   :name "Butter"^^xsd:string ;
-  :hasCalories "100"^^xsd:int ;
+  :hasCalories "717"^^xsd:int ;
+  :containsAllergen :Lactose ;
+  :fitForDiet :Omnivore ;
+  :fitForDiet :Vegetarian ;
 .
 
 :ParmesanCheese a :DairyProduct ; 
   :name "Parmesan Cheese"^^xsd:string ;
-  :hasCalories "90"^^xsd:int ;
+  :hasCalories "431"^^xsd:int ;
   :containsAllergen :Lactose ;
+  :fitForDiet :Omnivore ;
+  :fitForDiet :Vegetarian ;
 .
 
 :WheatPasta a :GrainProduct ; 
   :name "Wheat Pasta"^^xsd:string ;
-  :hasCalories "220"^^xsd:int ;
+  :hasCalories "350"^^xsd:int ;
   :containsAllergen :Gluten ;
+  :fitForDiet :Omnivore ;
+  :fitForDiet :Vegetarian ;
+  :fitForDiet :Vegan ;
 .
 
 :Eggs a :AnimalProduct ;
   :name "Eggs"^^xsd:string ;
-  :hasCalories "70"^^xsd:int ;
+  :hasCalories "143"^^xsd:int ;
   :containsAllergen :EggsAllergen ;
+  :fitForDiet :Omnivore ;
+  :fitForDiet :Vegetarian ;
 .
 
 :PorkCheek a :MeatProduct ;
   :name "Port Cheek"^^xsd:string ;
-  :hasCalories "150"^^xsd:int ;
+  :hasCalories "655"^^xsd:int ;
+  :fitForDiet :Omnivore ;
 .
 
 :PecorinoCheese a :DairyProduct ;
   :name "Pecorino Cheese"^^xsd:string ;
-  :hasCalories "80"^^xsd:int ;
+  :hasCalories "387"^^xsd:int ;
   :containsAllergen :Lactose ;
+  :fitForDiet :Omnivore ;
+  :fitForDiet :Vegetarian ;
 .
 
 :BlackPepper a :Spice ;
   :name "Black Pepper"^^xsd:string ;
-  :hasCalories "5"^^xsd:int ;
-.
-
-:WheatPastaSheets a :GrainProduct ;
-  :name "Wheat Pasta Sheets"^^xsd:string ;
-  :hasCalories "200"^^xsd:int ;
-  :containsAllergen :Gluten ;
+  :hasCalories "255"^^xsd:int ;
+  :fitForDiet :Omnivore ;
+  :fitForDiet :Vegetarian ;
+  :fitForDiet :Vegan ;
 .
 
 :GroundBeef a :MeatProduct ;
   :name "Ground Beef"^^xsd:string ;
-  :hasCalories "180"^^xsd:int ;
+  :hasCalories "250"^^xsd:int ;
+  :fitForDiet :Omnivore ;
 .
 
 :TomatoSauce a :Condiment ;
   :name "Tomato Sauce"^^xsd:string ;
-  :hasCalories "60"^^xsd:int ;
+  :hasCalories "40"^^xsd:int ;
+  :fitForDiet :Omnivore ;
+  :fitForDiet :Vegetarian ;
+  :fitForDiet :Vegan ;
 .
 
 :BechamelSauce a :DairyProduct ;
   :name "Bechamel Sauce"^^xsd:string ;
-  :hasCalories "90"^^xsd:int ;
+  :hasCalories "105"^^xsd:int ;
+  :containsAllergen :Gluten ;
   :containsAllergen :Lactose ;
+  :fitForDiet :Omnivore ;
+  :fitForDiet :Vegetarian ;
 .
 
-:Cornmeal a :GrainProduct ;
-  :name "Cornmeal"^^xsd:string ;
-  :hasCalories "170"^^xsd:int ;
+:Clams a :Seafood ;
+  :name "Clams"^^xsd:string ;
+  :hasCalories "74"^^xsd:int ;
+  :containsAllergen :Fish ;
+  :fitForDiet :Omnivore ;
 .
 
-:PorkSausage a :MeatProduct ;
-  :name "Pork Sausage"^^xsd:string ;
-  :hasCalories "200"^^xsd:int ;
+:Garlic a :Vegetable ;
+  :name "Garlic"^^xsd:string ;
+  :hasCalories "149"^^xsd:int ;
+  :fitForDiet :Omnivore ;
+  :fitForDiet :Vegetarian ;
+  :fitForDiet :Vegan ;
 .
 
 :OliveOil a :Condiment ;
   :name "Olive Oil"^^xsd:string ;
-  :hasCalories "120"^^xsd:int ;
+  :hasCalories "884"^^xsd:int ;
+  :fitForDiet :Omnivore ;
+  :fitForDiet :Vegetarian ;
+  :fitForDiet :Vegan ;
 .
 
-:Ladyfingers a :GrainProduct ;
-  :name "Ladyfingers"^^xsd:string ;
-  :hasCalories "120"^^xsd:int ;
-  :containsAllergen :Gluten ; 
-  :containsAllergen :EggsAllergen ;
+:Parsley a :Vegetable ;
+  :name "Parsley"^^xsd:string ;
+  :hasCalories "36"^^xsd:int ;
+  :fitForDiet :Omnivore ;
+  :fitForDiet :Vegetarian ;
+  :fitForDiet :Vegan ;
+.
+
+:WhiteWine a :Alcohol ;
+  :name "White Wine"^^xsd:string ;
+  :hasCalories "82"^^xsd:int ;
+  :fitForDiet :Omnivore ;
+  :fitForDiet :Vegetarian ;
+  :fitForDiet :Vegan ;
+.
+
+:BeefSteak a :AnimalProduct ;
+  :name "Beef Steak"^^xsd:string ;
+  :hasCalories "250"^^xsd:int ;
+  :fitForDiet :Omnivore ;
+.
+
+:Salt a :Condiment ;
+  :name "Salt"^^xsd:string ;
+  :hasCalories "0"^^xsd:int ;
+  :fitForDiet :Omnivore ;
+  :fitForDiet :Vegetarian ;
+  :fitForDiet :Vegan ;
+.
+
+:Chicken a :AnimalProduct ;
+  :name "Chicken"^^xsd:string ;
+  :hasCalories "165"^^xsd:int ;
+  :fitForDiet :Omnivore ;
+.
+
+:WheatFlour a :GrainProduct ;
+  :name "Wheat Flour"^^xsd:string ;
+  :hasCalories "364"^^xsd:int ;
+  :containsAllergen :Gluten
+  :fitForDiet :Omnivore ;
+  :fitForDiet :Vegetarian ;
+  :fitForDiet :Vegan ;
+.
+
+:Lemon a :Vegetable ;
+  :name "Lemon"^^xsd:string ;
+  :hasCalories "29"^^xsd:int ;
+  :fitForDiet :Omnivore ;
+  :fitForDiet :Vegetarian ;
+  :fitForDiet :Vegan ;
+.
+
+:LadyFingers a :GrainProduct ;
+  :name "Lady Fingers"^^xsd:string ;
+  :hasCalories "388"^^xsd:int ;
+  :containsAllergen :Gluten ;
+  :fitForDiet :Omnivore ;
+  :fitForDiet :Vegetarian ;
 .
 
 :MascarponeCheese a :DairyProduct ;
   :name "Mascarpone Cheese"^^xsd:string ;
-  :hasCalories "100"^^xsd:int ;
+  :hasCalories "435"^^xsd:int ;
   :containsAllergen :Lactose ;
+  :fitForDiet :Omnivore ;
+  :fitForDiet :Vegetarian ;
 .
 
 :Sugar a :Condiment ;
   :name "Sugar"^^xsd:string ;
-  :hasCalories "60"^^xsd:int ;
+  :hasCalories "387"^^xsd:int ;
+  :fitForDiet :Omnivore ;
+  :fitForDiet :Vegetarian ;
+  :fitForDiet :Vegan ;
 .
 
 :Coffee a :Condiment ;
   :name "Coffee"^^xsd:string ;
   :hasCalories "2"^^xsd:int ;
+  :fitForDiet :Omnivore ;
+  :fitForDiet :Vegetarian ;
+  :fitForDiet :Vegan ;
 .
 
 :CocoaPowder a :Condiment ;
   :name "Cocoa Powder"^^xsd:string ;
-  :hasCalories "20"^^xsd:int ;
+  :hasCalories "228"^^xsd:int ;
+  :fitForDiet :Omnivore ;
+  :fitForDiet :Vegetarian ;
+  :fitForDiet :Vegan ;
 .
 
-:WheatTortellini a :GrainProduct ;
-  :name "Wheat Tortellini"^^xsd:string ;
-  :hasCalories "200"^^xsd:int ;
-  :containsAllergen :Gluten ;
+:Water a :Water ;
+  :name "Water"^^xsd:string ;
+  :hasCalories "0"^^xsd:int ;
+  :fitForDiet :Omnivore ;
+  :fitForDiet :Vegetarian ;
+  :fitForDiet :Vegan ;
 .
 
-:MeatBroth a :MeatProduct ;
-  :name "Meat Broth"^^xsd:string ;
-  :hasCalories "80"^^xsd:int ;
+:RipeTomatoes a :Vegetable ;
+  :name "Ripe Tomatoes"^^xsd:string ;
+  :hasCalories "18"^^xsd:int ;
+  :fitForDiet :Omnivore ;
+  :fitForDiet :Vegetarian ;
+  :fitForDiet :Vegan ;
 .
 
-:WheatSpaghetti a :GrainProduct ;
-  :name "Wheat Spaghetti"^^xsd:string ;
-  :hasCalories "220"^^xsd:int ;
-  :containsAllergen :Gluten ;
+:Basil a :Vegetable ;
+  :name "Basil"^^xsd:string ;
+  :hasCalories "22"^^xsd:int ;
+  :fitForDiet :Omnivore ;
+  :fitForDiet :Vegetarian ;
+  :fitForDiet :Vegan ;
 .
 
-:WhiteWine a :Alcohol ;
-  :name "White Wine"^^xsd:string ;
-  :hasCalories "10"^^xsd:int ;
+:BellPepper a :Vegetable ;
+  :name "Bell Pepper"^^xsd:string ;
+  :hasCalories "17"^^xsd:int ;
+  :fitForDiet :Omnivore ;
+  :fitForDiet :Vegetarian ;
+  :fitForDiet :Vegan ;
 .
 
-:Clams a :Seafood ;
-  :name "Clams"^^xsd:string ;
-  :hasCalories "70"^^xsd:int ;
+:Zucchini a :Vegetable ;
+  :name "Zucchini"^^xsd:string ;
+  :hasCalories "31"^^xsd:int ;
+  :fitForDiet :Omnivore ;
+  :fitForDiet :Vegetarian ;
+  :fitForDiet :Vegan ;
+.
+
+:EggPlant a :Vegetable ;
+  :name "Egg Plant"^^xsd:string ;
+  :hasCalories "25"^^xsd:int ;
+  :fitForDiet :Omnivore ;
+  :fitForDiet :Vegetarian ;
+  :fitForDiet :Vegan ;
+.
+
+:SalmonFilet a :Seafood ;
+  :name "Salmon Filet"^^xsd:string ;
+  :hasCalories "210"^^xsd:int ;
   :containsAllergen :Fish ;
-.
-
-:Garlic a :Vegetable ;
-  :name "Garlic"^^xsd:string ;
-  :hasCalories "5"^^xsd:int ;
-.
-
-:Parsley a :Vegetable ;
-  :name "Parsley"^^xsd:string ;
-  :hasCalories "3"^^xsd:int ;
-.
-
-:Cheese a :DairyProduct ;
-  :name "Cheese"^^xsd:string ;
-  :hasCalories "50"^^xsd:int ;
-  :containsAllergen :Lactose ;
+  :fitForDiet :Omnivore ;
 .
