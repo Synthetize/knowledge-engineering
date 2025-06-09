@@ -5,8 +5,10 @@
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
 
 ###############
-# RDF DEFS
+# GUEST CLASS
 ###############
+
+:Guest a rdfs:Class .
 
 ###############
 # DISH SUB-CLASSES
@@ -65,7 +67,7 @@
 :Alcohol a rdfs:Class ;
   rdfs:subClassOf :Ingredient .
 
-:Wate a rdfs:Class ;
+:Water a rdfs:Class ;
  rdfs:subClassOf :Ingredient .
 
 ###############
@@ -110,6 +112,14 @@
   rdfs:domain :Ingredient ;
   rdfs:range :Diet .
 
+:hasAllergy a owl:ObjectProperty ;
+  rdfs:domain :Guest ;
+  rdfs:range :Allergen .
+
+:hasDietType a owl:ObjectProperty ;
+  rdfs:domain :Guest ;
+  rdfs:range :Diet .
+
 ###############
 # DATA PROPERTIES
 ###############
@@ -122,6 +132,34 @@
   rdfs:domain :Ingredient ;
   rdfs:range xsd:int .
 
+:gMaxCalories a owl:DatatypeProperty ;
+  rdfs:domain :Guest ;
+  rdfs:range xsd:int .
+
+###############
+# GUESTS
+###############
+
+:Guest1 a :Guest ;
+  :name "Guest 1"^^xsd:string ;
+  :hasAllergy :Gluten ;
+  :hasDietType :Vegan ;
+  :gMaxCalories "500"^^xsd:int ;
+.
+
+:Guest2 a :Guest ;
+  :name "Guest 2"^^xsd:string ;
+  :hasDietType :Omnivore ;
+  :gMaxCalories "3000"^^xsd:int ;
+.
+
+:Guest3 a :Guest ;
+  :name "Guest 3"^^xsd:string ;
+  :gMaxCalories "3000"^^xsd:int ;
+  :hasAllergy :Lactose ;
+  :hasDietType :Vegetarian ;
+.
+
 ###############
 # DIETS
 ###############
@@ -133,7 +171,7 @@
   :canEat :RisottoAllaMilanese ;
   :canEat :Carbonara ;
   :canEat :Lasagna ;
-  :canEat :SpaghettiAlleVongole
+  :canEat :SpaghettiAlleVongole ;
   :canEat :PastaAlBurroParmigianoPepeNero ;
   :canEat :SpaghettiAlPomodoro ;
   :canEat :RisoConPomodoroCipollaPrezzemolo ;
@@ -141,7 +179,7 @@
   :canEat :ScaloppineAlLimone ;
   :canEat :InvoltiniDiManzoAlParmigiano ;
   :canEat :GuancialeCroccanteConUova ;
-  :canEat :OmeletteAlParmigianoConCipollePrezzemolo ;
+  :canEat :OmeletteParmigianoCipolle ;
   :canEat :MistoVerdure ;
   :canEat :SalmoneInCrosta ;
 .
@@ -153,7 +191,7 @@
   :canEat :RisottoAllaMilanese ;
   :canEat :SpaghettiAlPomodoro ;
   :canEat :PastaAlBurroParmigianoPepeNero ;
-  :canEat :OmeletteAlParmigianoConCipollePrezzemolo ;
+  :canEat :OmeletteParmigianoCipolle ;
   :canEat :MistoVerdure ;
 .
 
@@ -161,7 +199,7 @@
   :canEat :SorbettoAlLimone ;
   :canEat :SpaghettiAlPomodoro ;
   :canEat :RisoConPomodoroCipollaPrezzemolo ;
-  :canEat :OmeletteAlParmigianoConCipollePrezzemolo ;
+  :canEat :MistoVerdure ;
 .
 
 ###############
@@ -176,7 +214,7 @@
 .
 
 :CremaCaffe a :Dessert ;
-  :name "Sorbetto al limone"^^xsd:string ;
+  :name "Crema Caffe "^^xsd:string ;
   :hasIngredient :Coffee ;
   :hasIngredient :MascarponeCheese ;
   :hasIngredient :Water ;
@@ -220,7 +258,7 @@
   :hasIngredient :Salt ;
 .
 
-:Tiramisu a :MainCourse ;
+:Tiramisu a :Dessert ;
   :name "Tiramisù"^^xsd:string ;
   :hasIngredient :LadyFingers ;
   :hasIngredient :MascarponeCheese ;
@@ -300,7 +338,7 @@
   :hasIngredient :OliveOil ;
 .
 
-:OmeletteAlParmigianoConCipollePrezzemolo a :SecondCourse ;
+:OmeletteParmigianoCipolle a :SecondCourse ;
   :name "Omelette al Parmigiano con Cipolle e Prezzemolo"^^xsd:string ;
   :hasIngredient :Eggs ;
   :hasIngredient :ParmesanCheese ;
@@ -456,7 +494,7 @@
 
 :OliveOil a :Condiment ;
   :name "Olive Oil"^^xsd:string ;
-  :hasCalories "884"^^xsd:int ;
+  :hasCalories "250"^^xsd:int ;
   :fitForDiet :Omnivore ;
   :fitForDiet :Vegetarian ;
   :fitForDiet :Vegan ;
@@ -501,7 +539,7 @@
 :WheatFlour a :GrainProduct ;
   :name "Wheat Flour"^^xsd:string ;
   :hasCalories "364"^^xsd:int ;
-  :containsAllergen :Gluten
+  :containsAllergen :Gluten ;
   :fitForDiet :Omnivore ;
   :fitForDiet :Vegetarian ;
   :fitForDiet :Vegan ;
