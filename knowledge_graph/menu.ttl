@@ -125,7 +125,7 @@
 ###############
 
 :name a owl:DatatypeProperty ;
-  rdfs:domain [ owl:unionOf ( :Dish :Ingredient :Allergen ) ] ;
+  rdfs:domain [ owl:unionOf ( :Dish :Ingredient :Allergen :Guest ) ] ;
   rdfs:range xsd:string .
 
 :hasCalories a owl:DatatypeProperty ;
