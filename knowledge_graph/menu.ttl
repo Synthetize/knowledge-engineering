@@ -55,9 +55,6 @@
 :GrainProduct a rdfs:Class ;
   rdfs:subClassOf :Ingredient .
 
-:Legume a rdfs:Class ;
-  rdfs:subClassOf :Ingredient .
-
 :Spice a rdfs:Class ;
   rdfs:subClassOf :Ingredient .
 
@@ -91,6 +88,18 @@
 :Nuts a :Allergen ;
   :name "Nut Intollerant"^^xsd:string ;
 .
+
+###############
+# DISJOINT CLASSES
+###############
+
+[ a owl:AllDisjointClasses ;
+  owl:members ( :Diet :Guest :Allergen :Ingredient :Dish )
+] .
+
+[ a owl:AllDisjointClasses ;
+  owl:members ( :Diet :Guest :Allergen :Ingredient :Dish )
+] .
 
 ###############
 # OBJECT PROPERTIES
@@ -242,7 +251,7 @@
 
 :Lasagna a :MainCourse ;
   :name "Lasagna"^^xsd:string ;
-  :hasIngredient :WheatPastaSheets ;
+  :hasIngredient :WheatPasta ;
   :hasIngredient :GroundBeef ;
   :hasIngredient :TomatoSauce ;
   :hasIngredient :BechamelSauce ;
@@ -516,7 +525,7 @@
   :fitForDiet :Vegan ;
 .
 
-:BeefSteak a :AnimalProduct ;
+:BeefSteak a :MeatProduct ;
   :name "Beef Steak"^^xsd:string ;
   :hasCalories "250"^^xsd:int ;
   :fitForDiet :Omnivore ;
@@ -530,7 +539,7 @@
   :fitForDiet :Vegan ;
 .
 
-:Chicken a :AnimalProduct ;
+:Chicken a :MeatProduct ;
   :name "Chicken"^^xsd:string ;
   :hasCalories "165"^^xsd:int ;
   :fitForDiet :Omnivore ;

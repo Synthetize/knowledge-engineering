@@ -32,3 +32,37 @@ WHERE {
 }
 GROUP BY ?maxCalories ?Meal
 HAVING (SUM(?cal) <= ?maxCalories)
+
+###############
+# GIVEN A GUEST, FIND ALL MEALS THEY CAN EAT BASED ON THEIR DIET TYPE, MAX CALORIES. DOES NOT CONSIDER ALLERGIES
+# THIS QUERY IS SIMILAR TO THE FIRST ONE BUT DOES NOT USER ALLERGEN PROPERTY INSTEAD IT USES FIT FOR DIET PROPERTY
+###############
+
+PREFIX : <http://menu.ch#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+
+SELECT ?Meal (SUM(?cal) AS ?Calories)
+WHERE { 
+    :Guest1 :hasDietType ?guestDiet ;
+            :gMaxCalories ?maxCalories .
+
+    ?dish :hasIngredient ?ingredient ;
+          :name ?Meal .
+
+    ?ingredient :hasCalories ?cal .
+
+    ?guestDiet :canEat ?dish .
+
+    FILTER NOT EXISTS {
+        ?dish :hasIngredient ?dishIngredient .
+        FILTER NOT EXISTS {
+            ?dishIngredient :fitForDiet ?dietType .
+            FILTER (?dietType = ?guestDiet)
+        }
+    }
+}
+GROUP BY ?Meal ?maxCalories
+HAVING (SUM(?cal) <= ?maxCalories)
