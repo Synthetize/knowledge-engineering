@@ -1,0 +1,155 @@
+<div class="notebook">
+
+<div class="nb-cell program" name="p1">
+ingredient(rice, plant, 130, []).
+ingredient(saffron, plant, 310, []).
+ingredient(onion, plant, 40, []).
+ingredient(butter, animal_product, 717, [milk]).
+ingredient(parmesan_cheese, animal_product, 431, [milk]).
+ingredient(wheat_pasta, plant, 350, [gluten]).
+ingredient(eggs, animal_product, 143, [eggs]).
+ingredient(pork_cheek, animal, 655, []).
+ingredient(pecorino_cheese, animal_product, 387, [milk]).
+ingredient(black_pepper, plant, 255, []).
+ingredient(ground_beef, animal, 250, []).
+ingredient(tomato_sauce, plant, 40, []).
+ingredient(bechamel_sauce, animal_product, 105, [gluten, milk]).
+ingredient(clams, animal, 74, [fish]).
+ingredient(garlic, plant, 149, []).
+ingredient(olive_oil, plant, 250, []).
+ingredient(parsley, plant, 36, []).
+ingredient(white_wine, plant, 82, []).
+ingredient(beef_steak, animal, 250, []).
+ingredient(salt, mineral, 0, []).
+ingredient(chicken, animal, 165, []).
+ingredient(wheat_flour, plant, 364, [gluten]).
+ingredient(lemon, plant, 29, []).
+ingredient(lady_fingers, animal_product, 388, [gluten, eggs]).
+ingredient(mascarpone_cheese, animal_product, 435, [milk]).
+ingredient(sugar, plant, 387, []).
+ingredient(coffee, plant, 2, []).
+ingredient(cocoa_powder, plant, 228, []).
+ingredient(water, mineral, 0, []).
+ingredient(ripe_tomatoes, plant, 18, []).
+ingredient(basil, plant, 22, []).
+ingredient(bell_pepper, plant, 17, []).
+ingredient(zucchini, plant, 31, []).
+ingredient(eggplant, plant, 25, []).
+ingredient(salmon_filet, animal, 210, [fish]).
+
+dish(sorbetto_al_limone, [lemon, water, sugar]).
+dish(tiramisu, [lady_fingers, mascarpone_cheese, eggs, sugar, coffee, cocoa_powder]).
+dish(crema_caffe, [coffee, mascarpone_cheese, water, cocoa_powder, sugar]).
+dish(risotto_alla_milanese, [rice, saffron, onion, butter, parmesan_cheese]).
+dish(carbonara, [wheat_pasta, eggs, pork_cheek, pecorino_cheese, black_pepper]).
+dish(lasagna, [wheat_pasta, ground_beef, tomato_sauce, bechamel_sauce]).
+dish(spaghetti_alle_vongole, [wheat_pasta, clams, garlic, olive_oil, parsley, white_wine]).
+dish(spaghetti_al_pomodoro, [wheat_pasta, ripe_tomatoes, garlic, olive_oil, basil, salt]).
+dish(pasta_al_burro_parmigiano_e_pepe_nero, [wheat_pasta, butter, parmesan_cheese, black_pepper, salt]).
+dish(riso_con_pomodoro_cipolla_e_prezzemolo, [rice, ripe_tomatoes, onion, olive_oil, parsley, salt, black_pepper]).
+dish(bistecca_alla_fiorentina, [beef_steak, salt, black_pepper]).
+dish(scaloppine_al_limone, [chicken, wheat_flour, lemon, butter, parsley, salt, black_pepper, olive_oil]).
+dish(involtini_di_manzo_al_parmigiano, [beef_steak, parmesan_cheese, parsley, garlic, olive_oil, black_pepper, salt]).
+dish(guanciale_croccante_con_uova, [pork_cheek, eggs, parmesan_cheese, black_pepper, olive_oil, salt]).
+dish(omelette_parmigiano_cipolle, [eggs, parmesan_cheese, onion, butter, parsley, salt, black_pepper]).
+dish(misto_verdure, [bell_pepper, zucchini, eggplant, garlic, olive_oil, parsley, salt]).
+dish(salmone_in_crosta, [salmon_filet, wheat_flour, olive_oil, parsley, garlic, lemon, salt]).
+
+client(elena, vegetarian, 1800, [gluten, milk]).
+client(francesco, omnivore, 2200, [fish]).
+client(sofia, vegan, 1300, []).
+client(alessandro, omnivore, 3000, [nuts, eggs]).
+client(giulia, vegetarian, 1400, [eggs]).
+client(matteo, vegan, 2000, [gluten]).
+client(chiara, omnivore, 1900, []).
+client(davide, vegetarian, 1600, [nuts]).
+client(beatrice, omnivore, 2800, [milk]).
+client(riccardo, vegan, 1700, [gluten, nuts]).
+
+is_animal(Ingredient) :- ingredient(Ingredient, animal, _, _).
+is_animal_product(Ingredient) :- ingredient(Ingredient, animal_product, _, _).
+is_plant(Ingredient) :- ingredient(Ingredient, plant, _, _).
+is_mineral(Ingredient) :- ingredient(Ingredient, mineral, _, _).
+
+
+%rules to check if a dish is vegan
+is_vegan_ingredient(Ing) :- is_plant(Ing).
+is_vegan_ingredient(Ing) :- is_mineral(Ing).
+
+all_ingredients_are_vegan([]).
+all_ingredients_are_vegan([Head|Tail]) :-
+    is_vegan_ingredient(Head),
+    all_ingredients_are_vegan(Tail).
+
+is_vegan(Dish) :-
+    dish(Dish, Ingredients),
+    all_ingredients_are_vegan(Ingredients),
+    !.
+
+%rules to check if a dish is vegetarian
+is_vegetarian_ingredient(Ing) :- is_plant(Ing).
+is_vegetarian_ingredient(Ing) :- is_mineral(Ing).
+is_vegetarian_ingredient(Ing) :- is_animal_product(Ing).
+
+all_ingredients_are_vegetarian([]).
+all_ingredients_are_vegetarian([Head|Tail]) :-
+    is_vegetarian_ingredient(Head),
+    all_ingredients_are_vegetarian(Tail).
+
+is_vegetarian(Dish) :-
+    dish(Dish, Ingredients),
+    all_ingredients_are_vegetarian(Ingredients),
+    !.
+
+%rules to check if a dish is omnivore
+is_omnivore(Dish) :-
+    dish(Dish, _).
+
+%check dish allergens
+ingredient_contains_allergens(Ingredient, AllergensList) :-
+    ingredient(Ingredient, _, _, IngredientAllergens),
+    member(Allergen, AllergensList),     
+    member(Allergen, IngredientAllergens).
+
+dish_contains_allergens(Dish,AllergensList) :-
+    dish(Dish,IngredientsList),
+    member(Ingridient,IngredientsList),
+    ingredient_contains_allergens(Ingridient,AllergensList),
+    !.
+
+%check dish calories
+sum_calories([], 0).
+sum_calories([Ingredient | Rest], TotalCalories) :-
+    ingredient(Ingredient, _, Calories, _),
+    sum_calories(Rest, RestCalories),
+    TotalCalories is Calories + RestCalories.
+
+is_dish_below_calories(Dish, MaxCalories) :-
+    dish(Dish, Ingredients),
+    sum_calories(Ingredients, TotalCalories),
+    TotalCalories =&lt; MaxCalories.
+
+%suggested dishes by client
+suggested_dishes(ClientName, Dish) :-
+    client(ClientName, DietType, MaxCalories, Allergens),
+    dish(Dish, _),
+ 	(
+        DietType = vegan -&gt; is_vegan(Dish);
+        DietType = vegetarian -&gt; is_vegetarian(Dish);
+        DietType = omnivore
+    ),
+    not(dish_contains_allergens(Dish,Allergens)),
+    is_dish_below_calories(Dish, MaxCalories).
+    
+    
+
+
+
+
+</div>
+
+<div class="nb-cell query" name="q1">
+
+</div>
+
+</div>
