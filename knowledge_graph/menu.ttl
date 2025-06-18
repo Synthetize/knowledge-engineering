@@ -97,10 +97,6 @@
   owl:members ( :Diet :Guest :Allergen :Ingredient :Dish )
 ] .
 
-[ a owl:AllDisjointClasses ;
-  owl:members ( :Diet :Guest :Allergen :Ingredient :Dish )
-] .
-
 ###############
 # OBJECT PROPERTIES
 ###############
