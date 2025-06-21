@@ -1,6 +1,3 @@
-<div class="notebook">
-
-<div class="nb-cell program" name="p1">
 ingredient(rice, plant, 130, []).
 ingredient(saffron, plant, 310, []).
 ingredient(onion, plant, 40, []).
@@ -66,7 +63,6 @@ client(davide, vegetarian, 1600, [nuts]).
 client(beatrice, omnivore, 2800, [milk]).
 client(riccardo, vegan, 1700, [gluten, nuts]).
 
-is_animal(Ingredient) :- ingredient(Ingredient, animal, _, _).
 is_animal_product(Ingredient) :- ingredient(Ingredient, animal_product, _, _).
 is_plant(Ingredient) :- ingredient(Ingredient, plant, _, _).
 is_mineral(Ingredient) :- ingredient(Ingredient, mineral, _, _).
@@ -76,14 +72,14 @@ is_mineral(Ingredient) :- ingredient(Ingredient, mineral, _, _).
 is_vegan_ingredient(Ing) :- is_plant(Ing).
 is_vegan_ingredient(Ing) :- is_mineral(Ing).
 
-all_ingredients_are_vegan([]).
-all_ingredients_are_vegan([Head|Tail]) :-
+are_all_ingredients_vegan([]).
+are_all_ingredients_vegan([Head|Tail]) :-
     is_vegan_ingredient(Head),
-    all_ingredients_are_vegan(Tail).
+    are_all_ingredients_vegan(Tail).
 
 is_vegan(Dish) :-
     dish(Dish, Ingredients),
-    all_ingredients_are_vegan(Ingredients),
+    are_all_ingredients_vegan(Ingredients),
     !.
 
 %rules to check if a dish is vegetarian
@@ -91,14 +87,14 @@ is_vegetarian_ingredient(Ing) :- is_plant(Ing).
 is_vegetarian_ingredient(Ing) :- is_mineral(Ing).
 is_vegetarian_ingredient(Ing) :- is_animal_product(Ing).
 
-all_ingredients_are_vegetarian([]).
-all_ingredients_are_vegetarian([Head|Tail]) :-
+are_all_ingredients_vegetarian([]).
+are_all_ingredients_vegetarian([Head|Tail]) :-
     is_vegetarian_ingredient(Head),
-    all_ingredients_are_vegetarian(Tail).
+    are_all_ingredients_vegetarian(Tail).
 
 is_vegetarian(Dish) :-
     dish(Dish, Ingredients),
-    all_ingredients_are_vegetarian(Ingredients),
+    are_all_ingredients_vegetarian(Ingredients),
     !.
 
 %rules to check if a dish is omnivore
@@ -109,7 +105,8 @@ is_omnivore(Dish) :-
 ingredient_contains_allergens(Ingredient, AllergensList) :-
     ingredient(Ingredient, _, _, IngredientAllergens),
     member(Allergen, AllergensList),     
-    member(Allergen, IngredientAllergens).
+    member(Allergen, IngredientAllergens),
+    !.
 
 dish_contains_allergens(Dish,AllergensList) :-
     dish(Dish,IngredientsList),
@@ -127,29 +124,21 @@ sum_calories([Ingredient | Rest], TotalCalories) :-
 is_dish_below_calories(Dish, MaxCalories) :-
     dish(Dish, Ingredients),
     sum_calories(Ingredients, TotalCalories),
-    TotalCalories =&lt; MaxCalories.
+    TotalCalories =< MaxCalories.
+
+
+%check if a dish can be eaten in the diet
+is_dish_allowed_by_diet(omnivore, Dish) :- is_omnivore(Dish).
+
+is_dish_allowed_by_diet(vegetarian, Dish) :- is_vegetarian(Dish).
+
+is_dish_allowed_by_diet(vegan, Dish) :-is_vegan(Dish).
+
 
 %suggested dishes by client
 suggested_dishes(ClientName, Dish) :-
     client(ClientName, DietType, MaxCalories, Allergens),
     dish(Dish, _),
- 	(
-        DietType = vegan -&gt; is_vegan(Dish);
-        DietType = vegetarian -&gt; is_vegetarian(Dish);
-        DietType = omnivore
-    ),
+    is_dish_allowed_by_diet(DietType, Dish),
     not(dish_contains_allergens(Dish,Allergens)),
     is_dish_below_calories(Dish, MaxCalories).
-    
-    
-
-
-
-
-</div>
-
-<div class="nb-cell query" name="q1">
-
-</div>
-
-</div>
