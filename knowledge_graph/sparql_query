@@ -10,22 +10,22 @@ PREFIX owl: <http://www.w3.org/2002/07/owl#>
 
 SELECT ?Meal (SUM(?cal) AS ?Calories) 
 WHERE { 
-	?guest :hasDietType ?diet .
-	?guest :gMaxCalories ?maxCalories .
+	?guest :hasDietType ?diet ;
+	       :gMaxCalories ?maxCalories ;
+	       :hasAllergy ?guestAllergy .
 
-	?dish :hasIngredient ?ingredient .
-    ?dish :name ?Meal .
+	?dish :hasIngredient ?ingredient ;
+          :name ?Meal .
 
 	?ingredient :hasCalories ?cal .
 
 	?diet :canEat ?dish .
 
-	FILTER (?guest IN (:Guest2))
+	FILTER (?guest IN (:Guest1))
 
 	FILTER NOT EXISTS {
 		?dish :hasIngredient ?dishIngredient .
 		?dishIngredient :containsAllergen ?containedAllergen .
-		?guest :hasAllergy ?guestAllergy .
 		FILTER (?containedAllergen = ?guestAllergy)
 	}
    	
@@ -34,8 +34,7 @@ GROUP BY ?maxCalories ?Meal
 HAVING (SUM(?cal) <= ?maxCalories)
 
 ###############
-# GIVEN A GUEST, FIND ALL MEALS THEY CAN EAT BASED ON THEIR DIET TYPE, MAX CALORIES. DOES NOT CONSIDER ALLERGIES
-# THIS QUERY IS SIMILAR TO THE FIRST ONE BUT DOES NOT USER ALLERGEN PROPERTY INSTEAD IT USES FIT FOR DIET PROPERTY
+# GIVEN A DIET TYPE, FIND ALL MEALS THAT CAN BE EATEN
 ###############
 
 PREFIX : <http://menu.ch#>
@@ -44,25 +43,95 @@ PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 PREFIX owl: <http://www.w3.org/2002/07/owl#>
 
-SELECT ?Meal (SUM(?cal) AS ?Calories)
-WHERE { 
-    :Guest1 :hasDietType ?guestDiet ;
-            :gMaxCalories ?maxCalories .
+SELECT DISTINCT ?Meal
+WHERE {
+    VALUES ?dietType { :Vegetarian }
 
-    ?dish :hasIngredient ?ingredient ;
-          :name ?Meal .
+    ?dietType :canEat ?dish .
 
-    ?ingredient :hasCalories ?cal .
-
-    ?guestDiet :canEat ?dish .
+    ?dish :name ?Meal .
 
     FILTER NOT EXISTS {
-        ?dish :hasIngredient ?dishIngredient .
+        ?dish :hasIngredient ?ingredient .
         FILTER NOT EXISTS {
-            ?dishIngredient :fitForDiet ?dietType .
-            FILTER (?dietType = ?guestDiet)
+            ?ingredient :fitForDiet ?allowedDiet .
+            FILTER (?allowedDiet = ?dietType)
         }
     }
 }
-GROUP BY ?Meal ?maxCalories
-HAVING (SUM(?cal) <= ?maxCalories)
+ORDER BY ?Meal
+
+###############
+# GIVEN A DIET TYPE, FIND ALL THE INGREDIENTS THAT CAN BE EATEN
+###############
+
+PREFIX : <http://menu.ch#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+
+SELECT DISTINCT ?IngredientName
+WHERE {
+    VALUES ?dietType { :Omnivore }
+
+    ?ingredient :fitForDiet ?dietType ;
+                :name ?IngredientName .
+}
+ORDER BY ?IngredientName
+
+###############
+# GIVEN AN INGREDIENT, FIND ALL MEALS THAT CONTAIN IT
+###############
+
+PREFIX : <http://menu.ch#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+
+SELECT DISTINCT ?MealName
+WHERE {
+    VALUES ?ingredient { :WheatPasta }
+
+    ?meal :hasIngredient ?ingredient ;
+          :name ?MealName .
+}
+ORDER BY ?MealName
+
+###############
+# GIVEN AN ALLERGY, FIND ALL MEALS THAT CONTAIN IT
+###############
+
+PREFIX : <http://menu.ch#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+
+SELECT DISTINCT ?MealName
+WHERE {
+    VALUES ?allergen { :Fish }
+
+    ?meal :hasIngredient ?ingredient ;
+          :name ?MealName .
+
+    ?ingredient :containsAllergen ?allergen .
+}
+ORDER BY ?MealName
+
+###############
+# GIVEN A MEAL, FIND ALL INGREDIENTS IN IT  
+###############
+
+PREFIX : <http://menu.ch#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+
+SELECT DISTINCT ?IngredientName
+WHERE {
+    VALUES ?meal { :Tiramisu }
+
+    ?meal :hasIngredient ?ingredient .
+    ?ingredient :name ?IngredientName .
+}
+ORDER BY ?IngredientName
