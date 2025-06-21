@@ -3,14 +3,7 @@
 # If a dish has an ingredient that contains an allergen, then the dish itself contains that allergen.
 ###############
 
-:Dish(?d) ^ :hasIngredient(?d, ?i) ^ :containsAllergen(?i, ?a) -> :containsAllergen(?d, ?a)
-
-###############
-# Dish fits a diet if all ingredients fit the diet.
-# This is a partial inference (if at least one ingredient fits the diet, dish fits), not complete "all ingredients" logic.
-###############
-
-:Dish(?d) ^ :hasIngredient(?d, ?i) ^ :fitForDiet(?i, ?diet) -> :fitForDiet(?d, ?diet)
+:Dish(?d) ^ :hasIngredient(?d, ?i) ^ :containsAllergen(?i, ?a) -> :dishContainsAllergen(?d, ?a)
 
 ###############
 # Ingredient with allergen not suitable for a Guest with that allergy

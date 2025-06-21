@@ -105,6 +105,10 @@
   rdfs:domain :Ingredient ;
   rdfs:range :Allergen .
 
+:dishContainsAllergen a owl:ObjectProperty ;
+  rdfs:domain :Dish ;
+  rdfs:range :Allergen .
+
 :fitForDiet a owl:ObjectProperty ;
   rdfs:domain :Ingredient ;
   rdfs:range :Diet .
@@ -119,8 +123,7 @@
 
 :notSuitableFor a owl:ObjectProperty ;
   rdfs:domain :Dish ;
-  rdfs:range :Guest ;
-  rdfs:label "not suitable for" .
+  rdfs:range :Guest .
 
 ###############
 # DATA PROPERTIES
@@ -136,6 +139,10 @@
 
 :gMaxCalories a owl:DatatypeProperty ;
   rdfs:domain :Guest ;
+  rdfs:range xsd:int .
+
+:dishTotalCalories a owl:DatatypeProperty ; 
+  rdfs:domain :Dish ; 
   rdfs:range xsd:int .
 
 ###############

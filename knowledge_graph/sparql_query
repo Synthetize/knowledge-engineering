@@ -3,34 +3,53 @@
 ###############
 
 PREFIX : <http://menu.ch#>
-PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
-PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-PREFIX owl: <http://www.w3.org/2002/07/owl#>
 
-SELECT ?Meal (SUM(?cal) AS ?Calories) 
-WHERE { 
-	?guest :hasDietType ?diet ;
-	       :gMaxCalories ?maxCalories ;
-	       :hasAllergy ?guestAllergy .
+SELECT ?Meal (SUM(?cal) AS ?Calories)
+WHERE {
+  VALUES ?guest { :Guest2 } 
 
-	?dish :hasIngredient ?ingredient ;
-          :name ?Meal .
+  ?guest :hasDietType ?diet ;
+         :gMaxCalories ?maxCalories .
 
-	?ingredient :hasCalories ?cal .
+  OPTIONAL { ?guest :hasAllergy ?guestAllergy . }
 
-	?diet :canEat ?dish .
+  ?diet :canEat ?dish .
+  ?dish :name ?Meal ;
+        :hasIngredient ?ingredient .
 
-	FILTER (?guest IN (:Guest1))
+  ?ingredient :hasCalories ?cal .
 
-	FILTER NOT EXISTS {
-		?dish :hasIngredient ?dishIngredient .
-		?dishIngredient :containsAllergen ?containedAllergen .
-		FILTER (?containedAllergen = ?guestAllergy)
-	}
-   	
+  FILTER NOT EXISTS {
+    ?guest :hasAllergy ?guestAllergy .
+    ?dish :hasIngredient ?dishIngredient .
+    ?dishIngredient :containsAllergen ?guestAllergy .
+  }
 }
-GROUP BY ?maxCalories ?Meal
+GROUP BY ?Meal ?maxCalories
+HAVING (SUM(?cal) <= ?maxCalories)
+
+# CAN BE CHANGED IF SOME PROPERTY IS INFERRED BY SWRL RULES
+
+PREFIX : <http://menu.ch#>
+
+SELECT ?Meal (SUM(?cal) AS ?Calories)
+WHERE {
+  VALUES ?guest { :Guest2 } 
+
+  ?guest :hasDietType ?diet ;
+         :gMaxCalories ?maxCalories .
+
+  ?diet :canEat ?dish .
+  ?dish :name ?Meal ;
+        :hasIngredient ?ingredient .
+
+  ?ingredient :hasCalories ?cal .
+
+  FILTER NOT EXISTS {
+    ?dish :notSuitableFor ?guest .
+  }
+}
+GROUP BY ?Meal ?maxCalories
 HAVING (SUM(?cal) <= ?maxCalories)
 
 ###############
@@ -38,24 +57,18 @@ HAVING (SUM(?cal) <= ?maxCalories)
 ###############
 
 PREFIX : <http://menu.ch#>
-PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
-PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-PREFIX owl: <http://www.w3.org/2002/07/owl#>
 
 SELECT DISTINCT ?Meal
 WHERE {
-    VALUES ?dietType { :Vegetarian }
+    VALUES ?dietType { :Vegan }  
 
     ?dietType :canEat ?dish .
-
     ?dish :name ?Meal .
 
     FILTER NOT EXISTS {
         ?dish :hasIngredient ?ingredient .
         FILTER NOT EXISTS {
-            ?ingredient :fitForDiet ?allowedDiet .
-            FILTER (?allowedDiet = ?dietType)
+            ?ingredient :fitForDiet ?dietType .
         }
     }
 }
@@ -66,10 +79,6 @@ ORDER BY ?Meal
 ###############
 
 PREFIX : <http://menu.ch#>
-PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
-PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-PREFIX owl: <http://www.w3.org/2002/07/owl#>
 
 SELECT DISTINCT ?IngredientName
 WHERE {
@@ -85,10 +94,6 @@ ORDER BY ?IngredientName
 ###############
 
 PREFIX : <http://menu.ch#>
-PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
-PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-PREFIX owl: <http://www.w3.org/2002/07/owl#>
 
 SELECT DISTINCT ?MealName
 WHERE {
@@ -104,10 +109,6 @@ ORDER BY ?MealName
 ###############
 
 PREFIX : <http://menu.ch#>
-PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
-PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-PREFIX owl: <http://www.w3.org/2002/07/owl#>
 
 SELECT DISTINCT ?MealName
 WHERE {
@@ -121,11 +122,25 @@ WHERE {
 ORDER BY ?MealName
 
 ###############
+# CAN BE CHANGED IF SOME PROPERTY IS INFERRED BY SWRL RULES
+###############
+
+PREFIX : <http://menu.ch#>
+
+SELECT DISTINCT ?MealName
+WHERE {
+    VALUES ?allergen { :Fish }
+
+    ?meal :dishContainsAllergen ?allergen ;
+          :name ?MealName .
+}
+ORDER BY ?MealName
+
+###############
 # GIVEN A MEAL, FIND ALL INGREDIENTS IN IT  
 ###############
 
 PREFIX : <http://menu.ch#>
-PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 
 SELECT DISTINCT ?IngredientName
 WHERE {
