@@ -3,21 +3,42 @@
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
 ###############
-# Dish Shape
+# Guest Shape
 ###############
 
-:DishShape a sh:NodeShape ;
-  sh:targetClass :Dish ;
-  sh:property [
-    sh:path :hasIngredient ;
-    sh:minCount 1 ;
-    sh:message "A dish must have at least one ingredient." ;
-  ] ;
+:GuestShape
+  a sh:NodeShape ;
+  sh:targetClass :Guest ;
+
   sh:property [
     sh:path :name ;
     sh:datatype xsd:string ;
     sh:minCount 1 ;
-    sh:message "A dish must have a name." ;
+    sh:maxCount 1 ;
+    sh:message "A guest must have a name." ;
+  ] ;
+
+  sh:property [
+    sh:path :hasDietType ;
+    sh:minCount 1 ;
+    sh:maxCount 1 ;
+    sh:class :Diet ;
+    sh:message "A guest must have exactly one diet type." ;
+  ] ;
+
+  sh:property [
+    sh:path :gMaxCalories ;
+    sh:datatype xsd:int ;
+    sh:minCount 1 ;
+    sh:maxCount 1 ;
+    sh:message "A guest must have a maximum calorie limit specified as an integer." ;
+  ] ;
+
+  sh:property [
+    sh:path :hasAllergy ;
+    sh:minCount 0 ;
+    sh:class :Allergen ;
+    sh:message "A guest may have zero or more allergies." ;
   ] .
 
 ###############
@@ -36,7 +57,20 @@
     sh:path :hasCalories ;
     sh:datatype xsd:int ;
     sh:minCount 1 ;
+    sh:maxCount 1 ;
     sh:message "An ingredient must have calories specified as an integer." ;
+  ] ;
+  sh:property [
+    sh:path :containsAllergen ;
+    sh:minCount 0 ;
+    sh:class :Allergen ;
+    sh:message "An ingredient may have zero or more allergens." ;
+  ] ;
+  sh:property [
+    sh:path :fitForDiet ;
+    sh:class :Diet ;
+    sh:minCount 1 ;
+    sh:message "An ingredient can be suitable for one or more diets." ;
   ] .
 
 ###############
@@ -49,6 +83,7 @@
     sh:path :name ;
     sh:datatype xsd:string ;
     sh:minCount 1 ;
+    sh:maxCount 1 ;
     sh:message "An allergen must have a name." ;
   ] .
 
@@ -59,8 +94,39 @@
 :DietShape a sh:NodeShape ;
   sh:targetClass :Diet ;
   sh:property [
+    sh:path :name ;
+    sh:datatype xsd:string ;
+    sh:minCount 1 ;
+    sh:maxCount 1 ;
+    sh:message "A diet must have a name." ;
+  ] ;
+  sh:property [
     sh:path :canEat ;
     sh:class :Dish ;
     sh:minCount 1 ;
     sh:message "A diet must list at least one dish it can eat." ;
+  ] .
+
+###############
+# Dish Shape
+###############
+
+:DishShape
+  a sh:NodeShape ;
+  sh:targetClass :Dish ;
+
+  # Dish must have a name (string)
+  sh:property [
+    sh:path :name ;
+    sh:datatype xsd:string ;
+    sh:minCount 1 ;
+    sh:maxCount 1 ;
+    sh:message "A dish must have a name." ;
+  ] ;
+
+  sh:property [
+    sh:path :hasIngredient ;
+    sh:minCount 1 ;
+    sh:class :Ingredient ;
+    sh:message "A dish must have at least one ingredient." ;
   ] .
