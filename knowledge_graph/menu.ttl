@@ -90,14 +90,6 @@
 .
 
 ###############
-# DISJOINT CLASSES
-###############
-
-[ a owl:AllDisjointClasses ;
-  owl:members ( :Diet :Guest :Allergen :Ingredient :Dish )
-] .
-
-###############
 # OBJECT PROPERTIES
 ###############
 
@@ -170,6 +162,7 @@
 ###############
 
 :Omnivore a :Diet ;
+  :name "Omnivore"^^xsd:string ;
   :canEat :SorbettoAlLimone ;
   :canEat :Tiramisu ;
   :canEat :CremaCaffe ;
@@ -190,6 +183,7 @@
 .
 
 :Vegetarian a :Diet ;
+  :name "Vegetarian"^^xsd:string ;
   :canEat :SorbettoAlLimone ;
   :canEat :Tiramisu ;
   :canEat :CremaCaffe ;
@@ -201,6 +195,7 @@
 .
 
 :Vegan a :Diet ;
+  :name "Vegan"^^xsd:string ;
   :canEat :SorbettoAlLimone ;
   :canEat :SpaghettiAlPomodoro ;
   :canEat :RisoConPomodoroCipollaPrezzemolo ;
