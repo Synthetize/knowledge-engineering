@@ -141,10 +141,6 @@
   rdfs:domain :Guest ;
   rdfs:range xsd:int .
 
-:dishTotalCalories a owl:DatatypeProperty ; 
-  rdfs:domain :Dish ; 
-  rdfs:range xsd:int .
-
 ###############
 # GUESTS
 ###############
