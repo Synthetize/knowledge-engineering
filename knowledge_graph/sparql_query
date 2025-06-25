@@ -11,8 +11,6 @@ WHERE {
   ?guest :hasDietType ?diet ;
          :gMaxCalories ?maxCalories .
 
-  OPTIONAL { ?guest :hasAllergy ?guestAllergy . }
-
   ?diet :canEat ?dish .
   ?dish :name ?Meal ;
         :hasIngredient ?ingredient .

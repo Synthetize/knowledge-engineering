@@ -165,6 +165,14 @@
   :hasDietType :Vegetarian ;
 .
 
+:Guest4 a :Guest ;
+  :name "Guest 4"^^xsd:string ;
+  :hasDietType :Omnivore ;
+  :hasAllergy :Lactose ;
+  :hasAllergy :Gluten ;
+  :gMaxCalories "3000"^^xsd:int ;
+.
+
 ###############
 # DIETS
 ###############
