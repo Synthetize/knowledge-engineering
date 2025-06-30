@@ -1,0 +1,61 @@
+Dish,Type,Diet,Ingredients
+Sorbetto al limone,Dessert,"Vegetarian, Vegan","Lemon, water, sugar"
+Tiramisu,Dessert,Vegetarian,"Lady Fingers, Mascarpone Cheese, Eggs, Sugar, Coffee, Cocoa Powder"
+Crema Caffè,Dessert,Vegetarian,"Coffee, Mascarpone Cheese. Water, Cocoa Powder,Sugar"
+Risotto alla milanese,Main Course,Vegetarian,"Rice, Saffron, Onion, Butter, Parmesan Cheese"
+Carbonara,Main Course,,"Wheat pasta, Eggs, Pork Cheek, Pecorino Cheese, Black Pepper"
+Lasagna,Main Course,,"Wheat Pasta, Ground Beef, Tomato Sauce, Bechamel Sauce"
+Spaghetti alle vongole,Main Course,,"Wheat pasta, Clams, Garlic, Olive Oil, Parsley, White Wine"
+Spaghetti al pomodoro,MainCourse,"Vegetarian, Vean","Wheat pasta, Ripe Tomatoes, Garlic, Olive Oil, Basil, salt"
+"Pasta al Burro, Parmigiano e Pepe Nero",MainCourse,Vegetarian,"wheat pasta, butter, parmesan cheese,black pepper, salt"
+"Riso con Pomodoro, Cipolla e Prezzemolo",MainCourse,Vegan,"rice, ripe tomatoes, onion, olive oil, parsley salt, black pepper"
+Bistecca alla Fiorentina,Second Course,,"Beef steak, Salt, Black pepper"
+scaloppine al limone,Second Course,,"Chicken, Wheat flour, Lemon, Butter, Parsley, Salt, Black Pepper, Olive Oil"
+Involtini di Manzo al Parmigiano,Second Course,,"Beef steak, Parmesan cheese, Parsley, Garlic, Olive Oil, Black Papper, Salt"
+Guanciale Croccante con Uova,Second Course,,"Pork cheek, eggs, parmesan cheese, black papper, olive oil, salt"
+Omelette al Parmigiano con Cipolle ,Second Course,Vegetarian,"eggs, parmesan cheese, onion, butter,parsley,salt, black pepper"
+Misto Verdure,Second Course,"Vegetarian,Vegan","bell peppers, zucchini, eggplants,garlic, olive oil, parsley, salt"
+Salmone in Crosta,Second Course,,"salmon filet, wheat flour, olive oil, parsley, garlic, lemon, salt"
+,,,
+,,,
+,,,
+,,,
+,,,
+By default all ingredients are considered omnivore,,,
+,,,
+Ingredients,Allergens,Diet,Calories
+Rice,None,"Vegetarian, Vegan",130
+Saffron,None,"Vegetarian, Vegan",310
+Onion,None,"Vegetarian, Vegan",40
+Butter,Milk,Vegetarian,717
+Parmesan Cheese,Milk,Vegetarian,431
+Wheat pasta,Gluten," Vegetarian, Vegan",350
+Eggs,Eggs,Vegetarian,143
+Pork Cheek,None,,655
+Pecorino Cheese,Milk,Vegetarian,387
+Black Pepper,None,"Vegetarian, Vegan",255
+Ground Beef,None,,250
+Tomato Sauce,None,"Vegetarian, Vegan",40
+Bechamel Sauce,"Gluten, Milk",Vegetarian,105
+Clams,Fish,,74
+Garlic,None,"Vegetarian, Vegan",149
+Olive Oil,None,"Vegetarian, Vegan",884
+Parsley,None,"Vegetarian, Vegan",36
+White Wine,None,"Vegetarian, Vegan",82
+Beef steak,None,,250
+Salt,None,"Vegetarian, Vegan",0
+Chicken,None,,165
+Wheat flour,Gluten,"Vegetarian, Vegan",364
+Lemon,None,"Vegetarian, Vegan",29
+Lady Fingers,Gluten,Vegetarian,388
+Mascarpone Cheese,Milk,Vegetarian,435
+Sugar,None,"Vegetarian, Vegan",387
+Coffee,None,"Vegetarian, Vegan",2
+Cocoa Powder,None,"Vegetarian, Vegan",228
+Water,None,"Vegetarian, Vegan",0
+Ripe Tomatoes,None,"Vegetarian, Vegan",18
+Basil,None,"Vegetarian, Vegan",22
+bell pepper,," Vegetarian, Vegan",17
+zucchini,," Vegetarian, Vegan",31
+eggplant,," Vegetarian, Vegan",25
+salmon filet,Fish,,210
